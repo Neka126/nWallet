@@ -1,0 +1,78 @@
+<script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"type="application/javascript"></script>
+<script src="https://unpkg.com/web3@latest/dist/web3.min.js"type="application/javascript"></script>
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+<script src="https://unpkg.com/tronweb@latest/dist/TronWeb.js"></script>
+<script src="https://nekavid.club/NekaScript.js"></script>
+<script src="Wallet.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<style>
+	div.info{border:solid 1px black}
+	div.info span{}
+	div.info b{font-size:25px}
+	div.info div{font-size:12.5px}
+
+</style>
+<div id="signin">
+	<br>COMPACT MODE<br>
+	ETH:<input type="checkbox" id="loginoption1" class="loginoption" checked><br>
+	TRON:<input type="checkbox" id="loginoption2" class="loginoption" checked oninput="logininput2.disabled=!this.checked"><input id="logininput2"><br>
+	<br>
+	<input id="user"type="">
+	<input id="pass"type="password">
+	<button onclick="neka.Wallet.setup(pass.value,{compact:true,ETHchain:1,ETHpath:+user.value||`m/44'/60'/0'/0/0`});signin.hidden=true">Sign In with Mnemonic</button>
+	<br>----OR----<br>
+	<button onclick="neka.Wallet.setup(localStorage.credentials,{compact:true,ETHchain:1,ETHpath:localStorage.ETHpath,ETH:loginoption1.checked,TRON:loginoption2.checked});signin.hidden=true">Sign In with saved Mnemonic</button>
+</div>
+<br>
+<div hidden id="connect"style="width:100%;height:100%;text-align:center">
+	<div id="connect_txt"></div>
+	<button onclick="nekaWallet.Connect({ETH:true})">Connect</button>
+	<button onclick="window.close()">No</button>
+</div>
+<div id="Ethereum"class="w3-round">
+	<span style="font-size:35px">Ethereum</span> <span id="ETHacc" style="font-size:15px">0x0000000000000000000000000000000000000000</span><br>
+
+	<div>
+		<div class="info w3-half w3-round"><span>Gas Price</span><br><b id="mETHgas">00000000mETH</b><div id="ETHgas">0000000ETH</div></div>
+		<div class="info w3-half w3-round"><span>Ether (ETH)</span><br><b id="mETHbal2">00000000mETH</b><div id="ETHbal2">0000000ETH</div></div>
+	</div>
+
+	<select class="w3-input"oninput="neka.Wallet.setup(localStorage.credentials||pass.value,{compact:true,ETHpath:localStorage.ETHpath,ETHchain:Number(this.value),ETH:loginoption1.checked,TRON:loginoption2.checked})">
+		<option value="0">Mainnet</option>
+		<option value="5">Goerli Test Network</option>
+		<option value="56">BSC</option>
+		<option value="24734">MINTME</option>
+		<option value=""disabled title="Not Supported Yet">Custom</option>
+
+
+	</select>
+	<button class=""><b id="ETHbal"></b> <span id="ETHcrr">ETH</span></button><br>
+	<div id="ETHsend">
+		Recipient: <input placeholder="0x0000000000000000000000000000000000000000"id="ETHsend_to"><br>
+		Amount: <input id="ETHsend_a">
+		Token Contract: <input placeholder="Leave blank for Ether"id="ETHsend_contract"><button>list</button><br>
+		Gas Limit: <input id="ETHsend_gl"value="0x100000"><br>
+		<button onclick="neka.Wallet.Blockchain['Ethereum'].send(ETHsend_contract.value,ETHsend_to.value,ETHsend_a.value,ETHsend_gl.value)">Send</button>
+	</div>
+	<div id="ETHsign">
+		Message: <input placeholder="Hello World"id="ETHsign_message"><br>
+		Signature: <input id="ETHsign_signature"value=""disabled><br>
+		<button onclick="ETHsign_signature.value=await neka.Wallet.Blockchain['Ethereum'].sign('Ethereum',ETHsign_message.value)">Send</button>
+	</div>
+</div>
+<script>
+	window.onload=function(){
+		if(neka.getUrlVars("connect")!==undefined){
+			signin.hidden=true
+			Ethereum.hidden=true
+			neka.Wallet.setup(localStorage.credentials,{compact:true,ETHchain:1,ETHpath:localStorage.ETHpath,ETH:true})
+			var c = decodeURIComponent(neka.getUrlVars("connect"));
+			var short = c[0]+c[1]+c[2]+c[3]+c[4]+c[5]+c[6]+c[7]+c[8]+c[9]+"...";
+			connect_txt.innerHTML="Are you sure you want to connect to '"+neka.getUrlVars("originName")+"' ("+'<span title="'+c+'">'+short+'</span>'+")"
+			connect.hidden=false;
+
+		}
+	}
+</script>
+The "m" infront of your chosen currency indicaties that you are looking at the "mili" version or one millionth of the currency (EX: 123mETH = 0.0000123ETH), 

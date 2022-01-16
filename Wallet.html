@@ -17,7 +17,7 @@
 <div id="signin">
 	<br>COMPACT MODE<br>
 	ETH:<input type="checkbox" id="loginoption1" class="loginoption" checked><br>
-	TRON:<input type="checkbox" id="loginoption2" class="loginoption" checked oninput="logininput2.disabled=!this.checked"><input id="logininput2"><br>
+	<a hidden>TRON:<input type="checkbox" id="loginoption2" class="loginoption" checked oninput="logininput2.disabled=!this.checked"><input id="logininput2"><br></a>
 	<br>
 	<input id="user"type="username"placeholder="m/44'/60'/0'/0/0"value="m/44'/60'/0'/0/0">
 	<input id="pass"type="password">
@@ -69,6 +69,7 @@
 			Ethereum.hidden=true
 			neka.Wallet.setup(localStorage.credentials,{compact:true,ETHchain:1,ETHpath:localStorage.ETHpath,ETH:true})
 			var c = decodeURIComponent(neka.getUrlVars("connect"));
+			c=c.split("://")[1]
 			var short = c[0]+c[1]+c[2]+c[3]+c[4]+c[5]+c[6]+c[7]+c[8]+c[9]+"...";
 			connect_txt.innerHTML="Are you sure you want to connect to '"+neka.getUrlVars("originName")+"' ("+'<span title="'+c+'">'+short+'</span>'+")"
 			connect.hidden=false;

@@ -21,7 +21,7 @@ neka.Wallet = {
 	path:{"ETH":""},
 	settings:{compact:true},
 	credentials:"",
-	setup:function(c,o){
+	setup:async function(c,o){
 		neka.Wallet.settings.compact=o.compact;
 		neka.Wallet.credentials=c;
 		neka.Wallet.path.ETH=o.ETHpath;

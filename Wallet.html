@@ -19,7 +19,7 @@
 	ETH:<input type="checkbox" id="loginoption1" class="loginoption" checked><br>
 	TRON:<input type="checkbox" id="loginoption2" class="loginoption" checked oninput="logininput2.disabled=!this.checked"><input id="logininput2"><br>
 	<br>
-	<input id="user"type="">
+	<input id="user"type="username"placeholder="m/44'/60'/0'/0/0"value="m/44'/60'/0'/0/0">
 	<input id="pass"type="password">
 	<button onclick="neka.Wallet.setup(pass.value,{compact:true,ETHchain:1,ETHpath:+user.value||`m/44'/60'/0'/0/0`});signin.hidden=true">Sign In with Mnemonic</button>
 	<br>----OR----<br>

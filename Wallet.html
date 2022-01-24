@@ -5,6 +5,9 @@
 <script src="https://unpkg.com/tronweb@latest/dist/TronWeb.js"></script>
 <script src="https://unpkg.com/arweave/bundles/web.bundle.min.js"></script>
 <script src="https://nekavid.club/NekaScript.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 <script src="Wallet.js"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
@@ -18,7 +21,7 @@
 <div id="signin">
 	<br>COMPACT MODE<br>
 	ETH:<input type="checkbox" id="loginoption1" class="loginoption" checked><br>
-	<a hidden>TRON:<input type="checkbox" id="loginoption2" class="loginoption" checked oninput="logininput2.disabled=!this.checked"><input id="logininput2"><br></a>
+	<a hidden>TRON:<input type="checkbox" id="loginoption2" class="loginoption" oninput="logininput2.disabled=!this.checked"><input id="logininput2"><br></a>
 	<br>
 	<input id="user"type="username"placeholder="m/44'/60'/0'/0/0"value="m/44'/60'/0'/0/0">
 	<input id="pass"type="password">
@@ -50,6 +53,7 @@
 
 	</select>
 	<button class=""><b id="ETHbal"></b> <span id="ETHcrr">ETH</span></button><br>
+	<div id="table"></div>
 	<div id="ETHsend">
 		Recipient: <input placeholder="0x0000000000000000000000000000000000000000"id="ETHsend_to"><br>
 		Amount: <input id="ETHsend_a">

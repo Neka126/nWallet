@@ -1,5 +1,6 @@
-var neka=neka||{},web3,nu;
+var neka=neka||{},web3,nu,du;
 neka.Wallet = {
+	genericErc20Abi:[     {         "constant": true,         "inputs": [],         "name": "name",         "outputs": [             {                 "name": "",                 "type": "string"             }         ],         "payable": false,         "stateMutability": "view",         "type": "function"     },     {         "constant": false,         "inputs": [             {                 "name": "_spender",                 "type": "address"             },             {                 "name": "_value",                 "type": "uint256"             }         ],         "name": "approve",         "outputs": [             {                 "name": "",                 "type": "bool"             }         ],         "payable": false,         "stateMutability": "nonpayable",         "type": "function"     },     {         "constant": true,         "inputs": [],         "name": "totalSupply",         "outputs": [             {                 "name": "",                 "type": "uint256"             }         ],         "payable": false,         "stateMutability": "view",         "type": "function"     },     {         "constant": false,         "inputs": [             {                 "name": "_from",                 "type": "address"             },             {                 "name": "_to",                 "type": "address"             },             {                 "name": "_value",                 "type": "uint256"             }         ],         "name": "transferFrom",         "outputs": [             {                 "name": "",                 "type": "bool"             }         ],         "payable": false,         "stateMutability": "nonpayable",         "type": "function"     },     {         "constant": true,         "inputs": [],         "name": "decimals",         "outputs": [             {                 "name": "",                 "type": "uint8"             }         ],         "payable": false,         "stateMutability": "view",         "type": "function"     },     {         "constant": true,         "inputs": [             {                 "name": "_owner",                 "type": "address"             }         ],         "name": "balanceOf",         "outputs": [             {                 "name": "balance",                 "type": "uint256"             }         ],         "payable": false,         "stateMutability": "view",         "type": "function"     },     {         "constant": true,         "inputs": [],         "name": "symbol",         "outputs": [             {                 "name": "",                 "type": "string"             }         ],         "payable": false,         "stateMutability": "view",         "type": "function"     },     {         "constant": false,         "inputs": [             {                 "name": "_to",                 "type": "address"             },             {                 "name": "_value",                 "type": "uint256"             }         ],         "name": "transfer",         "outputs": [             {                 "name": "",                 "type": "bool"             }         ],         "payable": false,         "stateMutability": "nonpayable",         "type": "function"     },     {         "constant": true,         "inputs": [             {                 "name": "_owner",                 "type": "address"             },             {                 "name": "_spender",                 "type": "address"             }         ],         "name": "allowance",         "outputs": [             {                 "name": "",                 "type": "uint256"             }         ],         "payable": false,         "stateMutability": "view",         "type": "function"     },     {         "payable": true,         "stateMutability": "payable",         "type": "fallback"     },     {         "anonymous": false,         "inputs": [             {                 "indexed": true,                 "name": "owner",                 "type": "address"             },             {                 "indexed": true,                 "name": "spender",                 "type": "address"             },             {                 "indexed": false,                 "name": "value",                 "type": "uint256"             }         ],         "name": "Approval",         "type": "event"     },     {         "anonymous": false,         "inputs": [             {                 "indexed": true,                 "name": "from",                 "type": "address"             },             {                 "indexed": true,                 "name": "to",                 "type": "address"             },             {                 "indexed": false,                 "name": "value",                 "type": "uint256"             }         ],         "name": "Transfer",         "type": "event"     } ],
 	getCurrency:function(chId){
 		switch(chId){
 			default:return ["Crypto"]
@@ -64,6 +65,31 @@ neka.Wallet = {
 			
 		}
 		clearInterval(nu)
+		clearInterval(du)
+		du = setInterval(async function(){
+			window.toks=[
+				{name:"JumpToken",shortname:"JMPT",address:"0x88D7e9B65dC24Cf54f5eDEF929225FC3E1580C25",chain:56},
+				{name:"WeChat$",shortname:"WeChat$",address:"0xB46A7c76a647fc049859a942AF4fb433812df388",chain:56}
+			]
+			var tabledata = [];
+			for(i=0;i<toks.length;i++){
+				bc=Number(document.getElementsByTagName("select")[0].value)
+				if(toks[i].chain==bc){
+					var data={result:"Tokens for this blockchain arent supported yet"}
+					switch(bc){
+						case 1: data = await $.get(`https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${toks[i].address}&address=${neka.Wallet.Blockchain["Ethereum"].address}&tag=latest&apikey=QGJQH87VT2TQYI7VUS32ZXSCD9VG3MSUJZ`)
+						
+						case 56: data = await $.get(`https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${toks[i].address}&address=${neka.Wallet.Blockchain["Ethereum"].address}&tag=latest&apikey=W7XU8X7K7JKGP4E31AIYRMY878BNZZTTSV`)
+					}
+					tabledata.push({Address:toks[i].address,Name:toks[i].name,Shortname:toks[i].shortname,Balance:ethers.utils.formatEther(data.result)+" "+toks[i].shortname})
+				}
+			}
+			
+			var table = new Tabulator("#table", {
+				data:tabledata,
+				autoColumns:true,
+			});
+		},10000)
 		if(o.noElm){}else{
 			nu = setInterval(async function(){
 				ETHbal.innerHTML=await neka.Wallet.Blockchain["Ethereum"].getBalance();
